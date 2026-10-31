@@ -60,6 +60,11 @@ class AuthService:
         else:
             print("Log (AuthService): Sessão ativa detectada. Login pulado.")
 
-        # VALIDAÇÃO DE SUCESSO
-        self.page.locator('a.titulomodulo', has_text='Radar Clássico').first.wait_for(state='visible', timeout=30000)
-        print("Log (AuthService): Login concluído e acesso confirmado!")
+                # VALIDAÇÃO DE SUCESSO
+                # Aguarda os plugins jQuery do portal (slimScroll, metisMenu) carregarem antes de buscar o menu
+            self.page.wait_for_function(
+                "() => window.jQuery && typeof window.jQuery.fn.metisMenu === 'function'",
+                timeout=15000
+            )
+            self.page.locator('a.titulomodulo', has_text='Radar Clássico').first.wait_for(state='visible',                                                                        timeout=30000)
+            print("Log (AuthService): Login concluído e acesso confirmado!")

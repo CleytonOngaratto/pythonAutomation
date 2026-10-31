@@ -11,7 +11,7 @@ class BrowserFactory:
     Princípio: Single Responsibility (SRP) - Apenas Infraestrutura.
     """
 
-    def __init__(self, porta: int = 9222):
+    def __init__(self, porta: int = 9230):
         self.caminho_chrome = Config.CHROME_PATH
         self.user_data_dir = Config.CHROME_DATA_DIR
         self.porta = porta
@@ -24,7 +24,8 @@ class BrowserFactory:
         comando = [
             self.caminho_chrome,
             f"--remote-debugging-port={self.porta}",
-            f"--user-data-dir={self.user_data_dir}"
+            f"--user-data-dir={self.user_data_dir}",
+            "--disable-extensions",
         ]
         # Abre o Chrome de forma independente
         subprocess.Popen(comando)
@@ -37,7 +38,7 @@ class BrowserFactory:
 
         print("Log (BrowserFactory): Conectando Playwright via CDP...")
         self.playwright = sync_playwright().start()
-        self.browser = self.playwright.chromium.connect_over_cdp(f"http://localhost:{self.porta}")
+        self.browser = self.playwright.chromium.connect_over_cdp(f"http://127.0.0.1:{self.porta}")
 
         context = self.browser.contexts[0]
 
